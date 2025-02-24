@@ -133,6 +133,7 @@
             // Możesz dodać więcej grup według tego samego schematu
         ];
 
+       
         // Funkcja do generowania tabel z wynikami
         function generateTables() {
             let tablesHTML = "";
@@ -156,9 +157,36 @@
             $("#tables").html(tablesHTML);
         }
 
+        // Funkcja do zapisywania punktów drużyn w localStorage
+        function savePoints() {
+            groups.forEach(groupData => {
+                groupData.teams.forEach(team => {
+                    localStorage.setItem(`team-${team.name}`, team.points);
+                });
+            });
+        }
+
+        // Funkcja do ładowania punktów drużyn z localStorage
+        function loadPoints() {
+            groups.forEach(groupData => {
+                groupData.teams.forEach(team => {
+                    let savedPoints = localStorage.getItem(`team-${team.name}`);
+                    if (savedPoints) {
+                        team.points = parseInt(savedPoints);
+                    }
+                });
+            });
+        }
+
         // Uruchomienie funkcji przy ładowaniu strony
         $(document).ready(function() {
+            loadPoints();  // Ładowanie zapisanych punktów
             generateTables();
+        });
+
+        // Przechowywanie danych po zmianie punktów w kodzie
+        $(window).on('beforeunload', function() {
+            savePoints();
         });
     </script>
 </body>
