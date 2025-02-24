@@ -33,6 +33,12 @@
         .group:hover {
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
+        .group:nth-child(odd) {
+            background: #003366; /* Dark blue */
+        }
+        .group:nth-child(even) {
+            background: #0044cc; /* Lighter blue */
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -54,9 +60,6 @@
             background-color: #1a1a1a;
             color: #f1c232;
         }
-        .team {
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
@@ -64,129 +67,62 @@
     <div id="tables"></div>
 
     <script>
-        // Grupy i drużyny z ich punktami
         let groups = [
-            { group: "A", teams: [
-                { name: "SIGMA BOYS", points: 0 },
-                { name: "ANANASY", points: 5 },
-                { name: "Shadow syndicate Aces", points: 7 },
-                { name: "Demony Low-elo", points: 3 },
-                { name: "NK Sport", points: 8 },
-                { name: "Baklawa na Gorzko", points: 6 }
-            ]},
-            { group: "B", teams: [
-                { name: "LowEloWojownicy", points: 9 },
-                { name: "Robercik Intuje Pozdro", points: 4 },
-                { name: "Gang Sztywniaków", points: 8 },
-                { name: "Czas Pras", points: 5 },
-                { name: "ZSE DRAGONS ZSE", points: 10 },
-                { name: "Coś Bym Zjadł (CBZ)", points: 2 }
-            ]},
-            { group: "C", teams: [
-                { name: "chlopaki z baraków", points: 12 },
-                { name: "Uzbekistan Nachos", points: 6 },
-                { name: "1Eagles", points: 7 },
-                { name: "NKL", points: 8 },
-                { name: "Piętasy", points: 5 },
-                { name: "Sigmos Banditos SB", points: 9 }
-            ]},
-            { group: "D", teams: [
-                { name: "Paweł Kajetan", points: 7 },
-                { name: "CLA Cyber Live Arena", points: 6 },
-                { name: "Elblancioro", points: 3 },
-                { name: "Firewolf Clan", points: 9 },
-                { name: "Kremóweczki Pawełka KMP", points: 10 },
-                { name: "SKP SKP", points: 5 }
-            ]},
-             { group: "E", teams: [
-                { name: "Paweł Kajetan", points: 7 },
-                { name: "CLA Cyber Live Arena", points: 6 },
-                { name: "Elblancioro", points: 3 },
-                { name: "Firewolf Clan", points: 9 },
-                { name: "Kremóweczki Pawełka KMP", points: 10 },
-                { name: "SKP SKP", points: 5 }
-            ]},
-             { group: "F", teams: [
-                { name: "Paweł Kajetan", points: 7 },
-                { name: "CLA Cyber Live Arena", points: 6 },
-                { name: "Elblancioro", points: 3 },
-                { name: "Firewolf Clan", points: 9 },
-                { name: "Kremóweczki Pawełka KMP", points: 10 },
-                { name: "SKP SKP", points: 5 }
-            ]},
-             { group: "G", teams: [
-                { name: "Paweł Kajetan", points: 7 },
-                { name: "CLA Cyber Live Arena", points: 6 },
-                { name: "Elblancioro", points: 3 },
-                { name: "Firewolf Clan", points: 9 },
-                { name: "Kremóweczki Pawełka KMP", points: 10 },
-                { name: "SKP SKP", points: 5 }
-            ]},
-             { group: "H", teams: [
-                { name: "Paweł Kajetan", points: 7 },
-                { name: "CLA Cyber Live Arena", points: 6 },
-                { name: "Elblancioro", points: 3 },
-                { name: "Firewolf Clan", points: 9 },
-                { name: "Kremóweczki Pawełka KMP", points: 10 },
-                { name: "SKP SKP", points: 5 }
-            ]},
-            // Możesz dodać więcej grup według tego samego schematu
+            {
+                name: "A",
+                teams: [
+                    { name: "SIGMA BOYS", points: 10 },
+                    { name: "ANANASY", points: 5 },
+                    { name: "Shadow syndicate Aces", points: 8 },
+                    { name: "Demony Low-elo", points: 9 },
+                    { name: "NK Sport", points: 4 },
+                    { name: "Baklawa na Gorzko", points: 6 }
+                ]
+            },
+            {
+                name: "B",
+                teams: [
+                    { name: "LowEloWojownicy", points: 3 },
+                    { name: "Robercik Intuje Pozdro", points: 9 },
+                    { name: "Gang Sztywniaków", points: 7 },
+                    { name: "Czas Pras", points: 10 },
+                    { name: "ZSE DRAGONS ZSE", points: 4 },
+                    { name: "Coś Bym Zjadł (CBZ)", points: 11 }
+                ]
+            },
+            // Dodaj pozostałe grupy tutaj, na przykład:
+            {
+                name: "C",
+                teams: [
+                    { name: "chlopaki z baraków", points: 6 },
+                    { name: "Uzbekistan Nachos", points: 5 },
+                    { name: "1Eagles", points: 9 },
+                    { name: "NKL", points: 8 },
+                    { name: "Piętasy", points: 7 },
+                    { name: "Sigmos Banditos SB", points: 12 }
+                ]
+            }
+            // Możesz dodać kolejne grupy w ten sposób...
         ];
 
-       
-        // Funkcja do generowania tabel z wynikami
         function generateTables() {
             let tablesHTML = "";
-            groups.forEach(groupData => {
-                tablesHTML += `<div class='group'>
-                                <h2>Grupa ${groupData.group}</h2>
-                                <table>
-                                    <tr><th>Drużyna</th><th>Punkty</th></tr>`;
-                
-                // Sortowanie drużyn w grupie po punktach
-                groupData.teams.sort((a, b) => b.points - a.points);
 
-                groupData.teams.forEach(team => {
-                    tablesHTML += `<tr><td class="team">${team.name}</td><td>${team.points}</td></tr>`;
-                });
-
+            groups.forEach(group => {
+                tablesHTML += `<div class='group'><h2>Grupa ${group.name}</h2><table><tr><th>Drużyna</th><th>Punkty</th></tr>`;
+                group.teams
+                    .sort((a, b) => b.points - a.points)  // Sortowanie drużyn po punktach
+                    .forEach(team => {
+                        tablesHTML += `<tr><td>${team.name}</td><td>${team.points}</td></tr>`;
+                    });
                 tablesHTML += `</table></div>`;
             });
 
-            // Wstawienie do DOM
             $("#tables").html(tablesHTML);
         }
 
-        // Funkcja do zapisywania punktów drużyn w localStorage
-        function savePoints() {
-            groups.forEach(groupData => {
-                groupData.teams.forEach(team => {
-                    localStorage.setItem(`team-${team.name}`, team.points);
-                });
-            });
-        }
-
-        // Funkcja do ładowania punktów drużyn z localStorage
-        function loadPoints() {
-            groups.forEach(groupData => {
-                groupData.teams.forEach(team => {
-                    let savedPoints = localStorage.getItem(`team-${team.name}`);
-                    if (savedPoints) {
-                        team.points = parseInt(savedPoints);
-                    }
-                });
-            });
-        }
-
-        // Uruchomienie funkcji przy ładowaniu strony
-        $(document).ready(function() {
-            loadPoints();  // Ładowanie zapisanych punktów
+        $(document).ready(function () {
             generateTables();
-        });
-
-        // Przechowywanie danych po zmianie punktów w kodzie
-        $(window).on('beforeunload', function() {
-            savePoints();
         });
     </script>
 </body>
