@@ -54,89 +54,112 @@
             background-color: #1a1a1a;
             color: #f1c232;
         }
-        input {
-            width: 60px;
-            padding: 5px;
-            font-size: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            text-align: center;
-            transition: border-color 0.3s;
-        }
-        input:focus {
-            border-color: #f1c232;
-            outline: none;
-        }
-        /* Disabled (readonly) input style */
-        input[readonly] {
-            background-color: #555;
-            cursor: not-allowed;
+        .team {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <h1>WLL - Faza Grupowa</h1>
-
-    <!-- Login Section -->
-    <div id="login">
-        <label for="password">Wpisz hasło, aby edytować wyniki:</label>
-        <input type="password" id="password" />
-        <button onclick="checkPassword()">Zaloguj się</button>
-    </div>
-
-    <!-- Tables Section -->
-    <div id="tables" style="display:none;"></div>
+    <div id="tables"></div>
 
     <script>
-        const correctPassword = "twoje_haslo"; // Wpisz swoje hasło, aby umożliwić edytowanie
-
+        // Grupy i drużyny z ich punktami
         let groups = [
-            ["SIGMA BOYS", "ANANASY", "Shadow syndicate Aces", "Demony Low-elo", "NK Sport","Baklawa na Gorzko"],
-            ["LowEloWojownicy", "Robercik Intuje Pozdro", "Gang Sztywniaków", "Czas Pras","ZSE DRAGONS ZSE","Coś Bym Zjadł (CBZ)"],
-            ["chlopaki z baraków", "Uzbekistan Nachos", "1Eagles", "NKL", "Piętasy","Sigmos Banditos SB"],
-            ["Paweł Kajetan", "CLA Cyber Live Arena", "Elblancioro", "Firewolf Clan","Kremóweczki Pawełka KMP","SKP SKP"],
-            ["KMS", "PGS", "TES Tuesday Slots", "Polska Delegacja Feederów", "Devil Parrots","VWORD GAMING WG","KMZ - Kiedys Mialem Zycie"],
-            ["AFK KZ", "MIUT FSO", "Gejpaka", "Holo Solo Mid","chemik.gaming CHE","Stacki na Heartsteelu SNH"],
-            ["TGB", "1vMEOW", "Unlimited Aura", "Dobre Chłopaki", "Iron Minds ZDZ","Guardians Of Desire ( GOD )"],
-            ["Laga Bonito", "leosia lovers", "Team Gorilla Tactics", "Bambusy","Tau2TheGame White TGW","Phantom Troupe PNT"]
+            { group: "A", teams: [
+                { name: "SIGMA BOYS", points: 10 },
+                { name: "ANANASY", points: 5 },
+                { name: "Shadow syndicate Aces", points: 7 },
+                { name: "Demony Low-elo", points: 3 },
+                { name: "NK Sport", points: 8 },
+                { name: "Baklawa na Gorzko", points: 6 }
+            ]},
+            { group: "B", teams: [
+                { name: "LowEloWojownicy", points: 9 },
+                { name: "Robercik Intuje Pozdro", points: 4 },
+                { name: "Gang Sztywniaków", points: 8 },
+                { name: "Czas Pras", points: 5 },
+                { name: "ZSE DRAGONS ZSE", points: 10 },
+                { name: "Coś Bym Zjadł (CBZ)", points: 2 }
+            ]},
+            { group: "C", teams: [
+                { name: "chlopaki z baraków", points: 12 },
+                { name: "Uzbekistan Nachos", points: 6 },
+                { name: "1Eagles", points: 7 },
+                { name: "NKL", points: 8 },
+                { name: "Piętasy", points: 5 },
+                { name: "Sigmos Banditos SB", points: 9 }
+            ]},
+            { group: "D", teams: [
+                { name: "Paweł Kajetan", points: 7 },
+                { name: "CLA Cyber Live Arena", points: 6 },
+                { name: "Elblancioro", points: 3 },
+                { name: "Firewolf Clan", points: 9 },
+                { name: "Kremóweczki Pawełka KMP", points: 10 },
+                { name: "SKP SKP", points: 5 }
+            ]},
+             { group: "E", teams: [
+                { name: "Paweł Kajetan", points: 7 },
+                { name: "CLA Cyber Live Arena", points: 6 },
+                { name: "Elblancioro", points: 3 },
+                { name: "Firewolf Clan", points: 9 },
+                { name: "Kremóweczki Pawełka KMP", points: 10 },
+                { name: "SKP SKP", points: 5 }
+            ]},
+             { group: "F", teams: [
+                { name: "Paweł Kajetan", points: 7 },
+                { name: "CLA Cyber Live Arena", points: 6 },
+                { name: "Elblancioro", points: 3 },
+                { name: "Firewolf Clan", points: 9 },
+                { name: "Kremóweczki Pawełka KMP", points: 10 },
+                { name: "SKP SKP", points: 5 }
+            ]},
+             { group: "G", teams: [
+                { name: "Paweł Kajetan", points: 7 },
+                { name: "CLA Cyber Live Arena", points: 6 },
+                { name: "Elblancioro", points: 3 },
+                { name: "Firewolf Clan", points: 9 },
+                { name: "Kremóweczki Pawełka KMP", points: 10 },
+                { name: "SKP SKP", points: 5 }
+            ]},
+             { group: "H", teams: [
+                { name: "Paweł Kajetan", points: 7 },
+                { name: "CLA Cyber Live Arena", points: 6 },
+                { name: "Elblancioro", points: 3 },
+                { name: "Firewolf Clan", points: 9 },
+                { name: "Kremóweczki Pawełka KMP", points: 10 },
+                { name: "SKP SKP", points: 5 }
+            ]},
+            // Możesz dodać więcej grup według tego samego schematu
         ];
 
-        function checkPassword() {
-            const passwordInput = document.getElementById("password").value;
-            if (passwordInput === correctPassword) {
-                localStorage.setItem("isLoggedIn", "true");
-                generateTables();
-                document.getElementById("login").style.display = "none";
-                document.getElementById("tables").style.display = "block";
-            } else {
-                alert("Niepoprawne hasło!");
-            }
-        }
-
+        // Funkcja do generowania tabel z wynikami
         function generateTables() {
             let tablesHTML = "";
-            groups.forEach((group, index) => {
-                tablesHTML += `<div class='group'><h2>Grupa ${String.fromCharCode(65 + index)}</h2><table><tr><th>Drużyna</th><th>Punkty</th></tr>`;
-                group.forEach(team => {
-                    let points = localStorage.getItem(team) || 0;
-                    let readonly = localStorage.getItem("isLoggedIn") === "true" ? "" : "readonly";
-                    tablesHTML += `<tr><td>${team}</td><td><input type='number' min='0' value='${points}' data-team='${team}' ${readonly}></td></tr>`;
+            groups.forEach(groupData => {
+                tablesHTML += `<div class='group'>
+                                <h2>Grupa ${groupData.group}</h2>
+                                <table>
+                                    <tr><th>Drużyna</th><th>Punkty</th></tr>`;
+                
+                // Sortowanie drużyn w grupie po punktach
+                groupData.teams.sort((a, b) => b.points - a.points);
+
+                groupData.teams.forEach(team => {
+                    tablesHTML += `<tr><td class="team">${team.name}</td><td>${team.points}</td></tr>`;
                 });
+
                 tablesHTML += `</table></div>`;
             });
+
+            // Wstawienie do DOM
             $("#tables").html(tablesHTML);
         }
 
-        $(document).ready(function () {
-            // Jeśli już jesteś zalogowany, przejdź od razu do tabeli
-            if (localStorage.getItem("isLoggedIn") === "true") {
-                generateTables();
-                document.getElementById("login").style.display = "none";
-                document.getElementById("tables").style.display = "block";
-            }
+        // Uruchomienie funkcji przy ładowaniu strony
+        $(document).ready(function() {
+            generateTables();
         });
     </script>
 </body>
 </html>
-
-
