@@ -33,12 +33,6 @@
         .group:hover {
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
-        .group:nth-child(odd) {
-            background: #003366; /* Dark blue */
-        }
-        .group:nth-child(even) {
-            background: #0044cc; /* Lighter blue */
-        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -73,6 +67,11 @@
             border-color: #f1c232;
             outline: none;
         }
+        /* Disabled (readonly) input style */
+        input[readonly] {
+            background-color: #555;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -81,25 +80,23 @@
 
     <script>
         let groups = [
-            ["SIGMA BOYS", "ANANASY", "Shadow syndicate Aces", "Demony Low-elo", "NK Sport", "Baklawa na Gorzko"],
-            ["LowEloWojownicy", "Robercik Intuje Pozdro", "Gang Sztywniaków", "Czas Pras", "ZSE DRAGONS ZSE", "Coś Bym Zjadł (CBZ)"],
-            ["chlopaki z baraków", "Uzbekistan Nachos", "1Eagles", "NKL", "Piętasy", "Sigmos Banditos SB"],
-            ["Paweł Kajetan", "CLA Cyber Live Arena", "Elblancioro", "Firewolf Clan", "Kremóweczki Pawełka KMP", "SKP SKP"],
-            ["KMS", "PGS", "TES Tuesday Slots", "Polska Delegacja Feederów", "Devil Parrots", "VWORD GAMING WG", "KMZ - Kiedys Mialem Zycie"],
-            ["AFK KZ", "MIUT FSO", "Gejpaka", "Holo Solo Mid", "chemik.gaming CHE", "Stacki na Heartsteelu SNH"],
-            ["TGB", "1vMEOW", "Unlimited Aura", "Dobre Chłopaki", "Iron Minds ZDZ", "Guardians Of Desire ( GOD )"],
-            ["Laga Bonito", "leosia lovers", "Team Gorilla Tactics", "Bambusy", "Tau2TheGame White TGW", "Phantom Troupe PNT"]
+            ["SIGMA BOYS", "ANANASY", "Shadow syndicate Aces", "Demony Low-elo", "NK Sport","Baklawa na Gorzko"],
+            ["LowEloWojownicy", "Robercik Intuje Pozdro", "Gang Sztywniaków", "Czas Pras","ZSE DRAGONS ZSE","Coś Bym Zjadł (CBZ)"],
+            ["chlopaki z baraków", "Uzbekistan Nachos", "1Eagles", "NKL", "Piętasy","Sigmos Banditos SB"],
+            ["Paweł Kajetan", "CLA Cyber Live Arena", "Elblancioro", "Firewolf Clan","Kremóweczki Pawełka KMP","SKP SKP"],
+            ["KMS", "PGS", "TES Tuesday Slots", "Polska Delegacja Feederów", "Devil Parrots","VWORD GAMING WG","KMZ - Kiedys Mialem Zycie"],
+            ["AFK KZ", "MIUT FSO", "Gejpaka", "Holo Solo Mid","chemik.gaming CHE","Stacki na Heartsteelu SNH"],
+            ["TGB", "1vMEOW", "Unlimited Aura", "Dobre Chłopaki", "Iron Minds ZDZ","Guardians Of Desire ( GOD )"],
+            ["Laga Bonito", "leosia lovers", "Team Gorilla Tactics", "Bambusy","Tau2TheGame White TGW","Phantom Troupe PNT"]
         ];
 
         function generateTables() {
             let tablesHTML = "";
-            let groupLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']; 
-
             groups.forEach((group, index) => {
-                tablesHTML += `<div class='group'><h2>Grupa ${groupLetters[index]}</h2><table><tr><th>Drużyna</th><th>Punkty</th></tr>`;
+                tablesHTML += `<div class='group'><h2>Grupa ${String.fromCharCode(65 + index)}</h2><table><tr><th>Drużyna</th><th>Punkty</th></tr>`;
                 group.forEach(team => {
                     let points = localStorage.getItem(team) || 0;
-                    tablesHTML += `<tr><td>${team}</td><td><input type='number' min='0' value='${points}' data-team='${team}'></td></tr>`;
+                    tablesHTML += `<tr><td>${team}</td><td><input type='number' min='0' value='${points}' data-team='${team}' readonly></td></tr>`;
                 });
                 tablesHTML += `</table></div>`;
             });
@@ -135,3 +132,4 @@
     </script>
 </body>
 </html>
+
