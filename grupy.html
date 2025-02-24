@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WLL - Faza Grupowa</title>
+    <link rel="icon" href="lodzo.jpg" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #000000, #1a1a1a, #0044cc, #f1c232);
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-top: 30px;
+            color: #fff;
+        }
+        .group {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+        .group:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .group:nth-child(odd) {
+            background: #003366; /* Dark blue */
+        }
+        .group:nth-child(even) {
+            background: #0044cc; /* Lighter blue */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #0044cc;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: white;
+        }
+        td {
+            font-size: 1rem;
+            background-color: #1a1a1a;
+            color: #f1c232;
+        }
+        input {
+            width: 60px;
+            padding: 5px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #f1c232;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>WLL - Faza Grupowa</h1>
+    <div id="tables"></div>
+
+    <script>
+        let groups = [
+            ["SIGMA BOYS", "ANANASY", "Shadow syndicate Aces", "Demony Low-elo", "NK Sport", "Baklawa na Gorzko"],
+            ["LowEloWojownicy", "Robercik Intuje Pozdro", "Gang Sztywniaków", "Czas Pras", "ZSE DRAGONS ZSE", "Coś Bym Zjadł (CBZ)"],
+            ["chlopaki z baraków", "Uzbekistan Nachos", "1Eagles", "NKL", "Piętasy", "Sigmos Banditos SB"],
+            ["Paweł Kajetan", "CLA Cyber Live Arena", "Elblancioro", "Firewolf Clan", "Kremóweczki Pawełka KMP", "SKP SKP"],
+            ["KMS", "PGS", "TES Tuesday Slots", "Polska Delegacja Feederów", "Devil Parrots", "VWORD GAMING WG", "KMZ - Kiedys Mialem Zycie"],
+            ["AFK KZ", "MIUT FSO", "Gejpaka", "Holo Solo Mid", "chemik.gaming CHE", "Stacki na Heartsteelu SNH"],
+            ["TGB", "1vMEOW", "Unlimited Aura", "Dobre Chłopaki", "Iron Minds ZDZ", "Guardians Of Desire ( GOD )"],
+            ["Laga Bonito", "leosia lovers", "Team Gorilla Tactics", "Bambusy", "Tau2TheGame White TGW", "Phantom Troupe PNT"]
+        ];
+
+        function generateTables() {
+            let tablesHTML = "";
+            let groupLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']; 
+
+            groups.forEach((group, index) => {
+                tablesHTML += `<div class='group'><h2>Grupa ${groupLetters[index]}</h2><table><tr><th>Drużyna</th><th>Punkty</th></tr>`;
+                group.forEach(team => {
+                    let points = localStorage.getItem(team) || 0;
+                    tablesHTML += `<tr><td>${team}</td><td><input type='number' min='0' value='${points}' data-team='${team}'></td></tr>`;
+                });
+                tablesHTML += `</table></div>`;
+            });
+            $("#tables").html(tablesHTML);
+        }
+
+        function updatePoints() {
+            $("input").on("input", function () {
+                let team = $(this).data("team");
+                let points = $(this).val();
+                localStorage.setItem(team, points);
+                sortTables();
+            });
+        }
+
+        function sortTables() {
+            $(".group").each(function () {
+                let rows = $(this).find("tr").slice(1).toArray();
+                rows.sort((a, b) => {
+                    let pointsA = parseInt($(a).find("input").val()) || 0;
+                    let pointsB = parseInt($(b).find("input").val()) || 0;
+                    return pointsB - pointsA;
+                });
+                $(this).find("table").append(rows);
+            });
+        }
+
+        $(document).ready(function () {
+            generateTables();
+            updatePoints();
+            sortTables();
+        });
+    </script>
+</body>
+</html>
