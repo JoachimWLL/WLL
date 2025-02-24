@@ -76,20 +76,9 @@
 </head>
 <body>
     <h1>WLL - Faza Grupowa</h1>
-
-    <!-- Login Section -->
-    <div id="login">
-        <label for="password">Wpisz hasło, aby edytować wyniki:</label>
-        <input type="password" id="password" />
-        <button onclick="checkPassword()">Zaloguj się</button>
-    </div>
-
-    <!-- Tables Section -->
-    <div id="tables" style="display:none;"></div>
+    <div id="tables"></div>
 
     <script>
-        const correctPassword = "szczur123g"; // Tutaj wpisz swoje hasło!
-
         let groups = [
             ["SIGMA BOYS", "ANANASY", "Shadow syndicate Aces", "Demony Low-elo", "NK Sport","Baklawa na Gorzko"],
             ["LowEloWojownicy", "Robercik Intuje Pozdro", "Gang Sztywniaków", "Czas Pras","ZSE DRAGONS ZSE","Coś Bym Zjadł (CBZ)"],
@@ -101,40 +90,46 @@
             ["Laga Bonito", "leosia lovers", "Team Gorilla Tactics", "Bambusy","Tau2TheGame White TGW","Phantom Troupe PNT"]
         ];
 
-        function checkPassword() {
-            const passwordInput = document.getElementById("password").value;
-            if (passwordInput === correctPassword) {
-                localStorage.setItem("isLoggedIn", "true");
-                generateTables();
-                document.getElementById("login").style.display = "none";
-                document.getElementById("tables").style.display = "block";
-            } else {
-                alert("Niepoprawne hasło!");
-            }
-        }
-
         function generateTables() {
             let tablesHTML = "";
             groups.forEach((group, index) => {
                 tablesHTML += `<div class='group'><h2>Grupa ${String.fromCharCode(65 + index)}</h2><table><tr><th>Drużyna</th><th>Punkty</th></tr>`;
                 group.forEach(team => {
                     let points = localStorage.getItem(team) || 0;
-                    let readonly = localStorage.getItem("isLoggedIn") === "true" ? "" : "readonly";
-                    tablesHTML += `<tr><td>${team}</td><td><input type='number' min='0' value='${points}' data-team='${team}' ${readonly}></td></tr>`;
+                    tablesHTML += `<tr><td>${team}</td><td><input type='number' min='0' value='${points}' data-team='${team}' readonly></td></tr>`;
                 });
                 tablesHTML += `</table></div>`;
             });
             $("#tables").html(tablesHTML);
         }
 
+        function updatePoints() {
+            $("input").on("input", function () {
+                let team = $(this).data("team");
+                let points = $(this).val();
+                localStorage.setItem(team, points);
+                sortTables();
+            });
+        }
+
+        function sortTables() {
+            $(".group").each(function () {
+                let rows = $(this).find("tr").slice(1).toArray();
+                rows.sort((a, b) => {
+                    let pointsA = parseInt($(a).find("input").val()) || 0;
+                    let pointsB = parseInt($(b).find("input").val()) || 0;
+                    return pointsB - pointsA;
+                });
+                $(this).find("table").append(rows);
+            });
+        }
+
         $(document).ready(function () {
-            // Jeśli już jesteś zalogowany, przejdź od razu do tabeli
-            if (localStorage.getItem("isLoggedIn") === "true") {
-                generateTables();
-                document.getElementById("login").style.display = "none";
-                document.getElementById("tables").style.display = "block";
-            }
+            generateTables();
+            updatePoints();
+            sortTables();
         });
     </script>
 </body>
 </html>
+
